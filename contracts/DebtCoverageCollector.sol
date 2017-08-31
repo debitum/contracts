@@ -122,27 +122,27 @@ contract DebtCoverageCollector {
     }
 
 
-    function sendCoin(string contractToken) payable returns (bool){
+    function sendCoin(string contractToken, address coinSender) payable returns (bool){
         var amount = msg.value;
         if (debtContracts[contractToken].exsists == false) {
-            TokenDoesNotExistsError(msg.sender, contractToken, now);
-            returnMoney();
+            TokenDoesNotExistsError(coinSender, contractToken, now);
+            returnMoney(coinSender);
             return false;
         }
 
         if (debtContracts[contractToken].amount != convertAmountToDigit(amount)) {
-            ContractAmountNotCorrectError(msg.sender, contractToken, debtContracts[contractToken].amount, convertAmountToDigit(amount), now);
-            returnMoney();
+            ContractAmountNotCorrectError(coinSender, contractToken, debtContracts[contractToken].amount, convertAmountToDigit(amount), now);
+            returnMoney(coinSender);
             return false;
         }
 
-        if (debtContracts[contractToken].isPaid) {
-            ContractAlreadyPaidError(msg.sender, contractToken, now);
-            returnMoney();
+        if (debtContracts[contractToken].isPaid == true) {
+            ContractAlreadyPaidError(coinSender, contractToken, now);
+            returnMoney(coinSender);
             return false;
         }
 
-        payContract(contractToken, amount);
+        payContract(contractToken, amount, coinSender);
 
         return true;
     }
@@ -205,10 +205,10 @@ contract DebtCoverageCollector {
     }
 
 
-    function payContract(string contractToken, uint amount) private {
-        debtContracts[contractToken].payer = msg.sender;
+    function payContract(string contractToken, uint amount, address coinSender) private {
+        debtContracts[contractToken].payer = coinSender;
         debtContracts[contractToken].paidAt = now;
-        ContractPaid(msg.sender, contractToken, amount, now);
+        ContractPaid(coinSender, contractToken, amount, now);
         mainOwner.transfer(amount);
     }
 
@@ -216,8 +216,8 @@ contract DebtCoverageCollector {
         return this.balance;
     }
 
-    function returnMoney() private {
-        msg.sender.transfer(msg.value);
+    function returnMoney(address coinSender) private {
+        coinSender.transfer(msg.value);
     }
 
     function AddEth() payable {

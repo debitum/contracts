@@ -13,7 +13,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
             return instance.addContract(contractToken, investmentMeta, 10000000000, {from: accounts[0], gass: 3000000})
         }).then(function () {
             initialBalance = web3.eth.getBalance(web3.eth.accounts[0]);
-            return meta.sendCoin(contractToken, {from: accounts[1], value: web3.toWei(1, 'ether')});
+            return meta.sendCoin(contractToken, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(1, 'ether')});
         }).then(function (result) {
             resultObj = result;
             balance = web3.eth.getBalance(web3.eth.accounts[0]);
@@ -26,7 +26,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
         var meta;
         return DebtCoverageCollector.deployed().then(function (instance) {
             meta = instance;
-            return meta.sendCoin("NOT_EXISTING_TOKEN", {from: accounts[1], value: web3.toWei(10, 'ether')});
+            return meta.sendCoin("NOT_EXISTING_TOKEN", web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(10, 'ether')});
         }).then(function (result) {
             assert.equal(result.logs[0].event, "TokenDoesNotExistsError", "Event that token does not exists has to be published");
         });
@@ -43,7 +43,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
             return instance.addContract(contractToken, investmentMeta, 10000000000, {from: accounts[0], gass: 3000000})
         }).then(function () {
             initialBalance = web3.eth.getBalance(web3.eth.accounts[0]);
-            return meta.sendCoin(contractToken, {from: accounts[1], value: web3.toWei(10, 'ether')});
+            return meta.sendCoin(contractToken, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(10, 'ether')});
         }).then(function (result) {
             resultObj = result;
             balance =  web3.eth.getBalance(web3.eth.accounts[0]);
@@ -84,12 +84,12 @@ contract('DebtCoverageCollector.sol', function (accounts) {
         }).then(function (resultObj) {
             assert.equal(resultObj.logs[0].event, "ContractAdded", "Event that contract added has to be published");
 
-            return contract.sendCoin(contractToken1, {from: accounts[1], value: web3.toWei(1, 'ether')});
+            return contract.sendCoin(contractToken1, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(1, 'ether')});
         }).then(function (resultObj) {
             assert.equal(resultObj.logs[0].event, "ContractPaid", "Event that contract was paid has to be published");
 
             client1Balance = web3.eth.getBalance(web3.eth.accounts[1]);
-            return contract.sendCoin(contractToken2, {from: accounts[2], value: web3.toWei(2, 'ether')});
+            return contract.sendCoin(contractToken2, web3.eth.accounts[2], {from: accounts[2], value: web3.toWei(2, 'ether')});
         }).then(function (resultObj) {
             assert.equal(resultObj.logs[0].event, "ContractPaid", "Event that contract was paid has to be published");
 
@@ -125,7 +125,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
         }).then(function () {
             return contract.addContract(contractToken2, investmentMeta, 20000000000, {from: accounts[0], gass: 3000000})
         }).then(function () {
-            return contract.sendCoin(contractToken1, {from: accounts[1], value: web3.toWei(1, 'ether')});
+            return contract.sendCoin(contractToken1, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(1, 'ether')});
         }).then(function () {
             client1Balance = web3.eth.getBalance(web3.eth.accounts[1]);
             var pays = new Array(2);
@@ -158,7 +158,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
             contract = instance;
             return instance.addContract(contractToken, investmentMeta, 10000000000, {from: accounts[0], gass: 3000000})
         }).then(function () {
-            return contract.sendCoin(contractToken, {from: accounts[1], value: web3.toWei(1, 'ether')});
+            return contract.sendCoin(contractToken, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(1, 'ether')});
         }).then(function () {
             client1Balance = web3.eth.getBalance(web3.eth.accounts[1]);
 
@@ -194,7 +194,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
             contract = instance;
             return instance.addContract(contractToken, investmentMeta, 10000000000, {from: accounts[0], gass: 3000000})
         }).then(function () {
-            return contract.sendCoin(contractToken, {from: accounts[1], value: web3.toWei(1, 'ether')});
+            return contract.sendCoin(contractToken, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(1, 'ether')});
         }).then(function () {
             client1Balance = web3.eth.getBalance(web3.eth.accounts[1]);
 
@@ -230,7 +230,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
             return contract.deleteContract(contractToken, {from: accounts[0], gass: 3000000});
         }).then(function (resultObj) {
             assert.equal(resultObj.logs[0].event, "ContractDeleted", "Event that contract was deleted has to be published");
-            return contract.sendCoin(contractToken, {from: accounts[1], value: web3.toWei(1, 'ether')});
+            return contract.sendCoin(contractToken, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(1, 'ether')});
         }).then(function(resultObj){
             assert.equal(resultObj.logs[0].event, "TokenDoesNotExistsError", "After contract is deleted user should not be able to delete it");
         });

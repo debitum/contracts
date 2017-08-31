@@ -17,10 +17,11 @@ contract Investment {
 
     function Investment(address debtCoverageCollectorAddress) {
         debtCoverageCollector = DebtCoverageCollector(debtCoverageCollectorAddress);
+        mainOwner = msg.sender;
     }
 
     function sendCoin(string contractToken) payable returns (bool){
-        return debtCoverageCollector.sendCoin.value(msg.value)(contractToken);
+        return debtCoverageCollector.sendCoin.value(msg.value)(contractToken, msg.sender);
     }
 
     function upgradeDebtCoverageCollector(address debtCoverageCollectorAddress) onlyOwner {
