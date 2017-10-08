@@ -19,7 +19,7 @@ contract('Investment.sol', function (accounts) {
                 return investmentContract.sendCoin(contractToken, {from: accounts[1], value: web3.toWei(1, 'ether')});
             }).then(function (result) {
                 resultObj = result;
-                balance = web3.eth.getBalance(web3.eth.accounts[0]);
+                var balance = web3.eth.getBalance(web3.eth.accounts[0]);
                 assert.equal((balance - initialBalance) / 1000000000000000000, 1, "Balance of contract owner has to increase with 1 eth");
             });
         });

@@ -16,7 +16,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
             return meta.sendCoin(contractToken, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(1, 'ether')});
         }).then(function (result) {
             resultObj = result;
-            balance = web3.eth.getBalance(web3.eth.accounts[0]);
+            var balance = web3.eth.getBalance(web3.eth.accounts[0]);
             assert.equal(resultObj.logs[0].event, "ContractPaid", "Event that contract was paid has to be published");
             assert.equal((balance - initialBalance) / 1000000000000000000, 1, "Balance of contract owner has to be equal to 1");
         });
@@ -46,7 +46,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
             return meta.sendCoin(contractToken, web3.eth.accounts[1], {from: accounts[1], value: web3.toWei(10, 'ether')});
         }).then(function (result) {
             resultObj = result;
-            balance =  web3.eth.getBalance(web3.eth.accounts[0]);
+            var balance =  web3.eth.getBalance(web3.eth.accounts[0]);
             assert.equal(resultObj.logs[0].event, "ContractAmountNotCorrectError", "Event that contract amount which client wants to send is not correct has to be published");
             assert.equal((balance - initialBalance), 0, "Owners eth in wallet has not increased");
         });
@@ -62,7 +62,7 @@ contract('DebtCoverageCollector.sol', function (accounts) {
         }).then(function () {
             return meta.getInvestmentMetaInfo(contractToken, {from: accounts[0], gass: 3000000});
         }).then(function (result) {
-            balance =  web3.eth.getBalance(web3.eth.accounts[0]);
+            var balance =  web3.eth.getBalance(web3.eth.accounts[0]);
             assert.equal(result, investmentMeta, "Owner retrieved investment meta info by contract token");
         });
     });
